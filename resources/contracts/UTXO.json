@@ -1,0 +1,3926 @@
+{
+  "contractName": "UTXO",
+  "abi": [],
+  "bytecode": "0x604c602c600b82828239805160001a60731460008114601c57601e565bfe5b5030600052607381538281f30073000000000000000000000000000000000000000030146080604052600080fd00a165627a7a723058200529d7488e059d57865cfcdc0eff5246c1c2953e8ef9e5f681c0af437fc373b50029",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fd00a165627a7a723058200529d7488e059d57865cfcdc0eff5246c1c2953e8ef9e5f681c0af437fc373b50029",
+  "sourceMap": "57:1343:9:-;;132:2:-1;166:7;155:9;146:7;137:37;252:7;246:14;243:1;238:23;232:4;229:33;270:1;265:20;;;;222:63;;265:20;274:9;222:63;;298:9;295:1;288:20;328:4;319:7;311:22;352:7;343;336:24",
+  "deployedSourceMap": "57:1343:9:-;;;;;;;;",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./alt_bn128.sol\";\r\n\r\nlibrary UTXO {\r\n  using alt_bn128 for uint256;\r\n  using alt_bn128 for alt_bn128.G1Point;\r\n  \r\n  // Represents an output unspent transaction output\r\n  struct Output {\r\n      address to;\r\n      alt_bn128.G1Point pc;\r\n      uint256[3] encryptedData;\r\n  }\r\n\t\r\n  /**\r\n  * @dev create Output Structures from inputs\r\n  * @param _to The address to transfer to.\r\n  * @param _pcTo Pedersen commitment for amount to transfer.\r\n  * @param _pcRemaining Pedersen commitment for amount remaining.\r\n  * @param _encryptedData Encrypted data that should contain (value, blinding factor, iv) for each output\r\n  */\r\n\tfunction createOutputs(address _to, uint256 _pcTo, uint256 _pcRemaining, uint256[6] _encryptedData) internal view returns (Output[] outputTx) {    \r\n    outputTx = new Output[](2);\r\n    \r\n    // Output for recipient\r\n    outputTx[0].to = _to;\r\n    outputTx[0].pc = _pcTo.decompress();\r\n    outputTx[0].encryptedData[0] = _encryptedData[0];\r\n    outputTx[0].encryptedData[1] = _encryptedData[1];\r\n    outputTx[0].encryptedData[2] = _encryptedData[2];\r\n\r\n    // Output to myself with remaining\r\n    outputTx[1].to = msg.sender;\r\n    outputTx[1].pc = _pcRemaining.decompress();\r\n    outputTx[1].encryptedData[0] = _encryptedData[3];\r\n    outputTx[1].encryptedData[1] = _encryptedData[4];\r\n    outputTx[1].encryptedData[2] = _encryptedData[5];\r\n\t}\r\n}",
+  "sourcePath": "C:\\Users\\dva\\Documents\\Development\\ELCA\\confidential-transactions-smart-contracts\\contracts\\UTXO.sol",
+  "ast": {
+    "absolutePath": "/C/Users/dva/Documents/Development/ELCA/confidential-transactions-smart-contracts/contracts/UTXO.sol",
+    "exportedSymbols": {
+      "UTXO": [
+        4660
+      ]
+    },
+    "id": 4661,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4519,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:9"
+      },
+      {
+        "absolutePath": "/C/Users/dva/Documents/Development/ELCA/confidential-transactions-smart-contracts/contracts/alt_bn128.sol",
+        "file": "./alt_bn128.sol",
+        "id": 4520,
+        "nodeType": "ImportDirective",
+        "scope": 4661,
+        "sourceUnit": 5439,
+        "src": "28:25:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 4660,
+        "linearizedBaseContracts": [
+          4660
+        ],
+        "name": "UTXO",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 4523,
+            "libraryName": {
+              "contractScope": null,
+              "id": 4521,
+              "name": "alt_bn128",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5438,
+              "src": "81:9:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_alt_bn128_$5438",
+                "typeString": "library alt_bn128"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "75:28:9",
+            "typeName": {
+              "id": 4522,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "95:7:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "id": 4526,
+            "libraryName": {
+              "contractScope": null,
+              "id": 4524,
+              "name": "alt_bn128",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5438,
+              "src": "113:9:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_alt_bn128_$5438",
+                "typeString": "library alt_bn128"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "107:38:9",
+            "typeName": {
+              "contractScope": null,
+              "id": 4525,
+              "name": "alt_bn128.G1Point",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4667,
+              "src": "127:17:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_G1Point_$4667_storage_ptr",
+                "typeString": "struct alt_bn128.G1Point"
+              }
+            }
+          },
+          {
+            "canonicalName": "UTXO.Output",
+            "id": 4535,
+            "members": [
+              {
+                "constant": false,
+                "id": 4528,
+                "name": "to",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "230:10:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 4527,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "230:7:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4530,
+                "name": "pc",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "249:20:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_G1Point_$4667_storage_ptr",
+                  "typeString": "struct alt_bn128.G1Point"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 4529,
+                  "name": "alt_bn128.G1Point",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 4667,
+                  "src": "249:17:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_G1Point_$4667_storage_ptr",
+                    "typeString": "struct alt_bn128.G1Point"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4534,
+                "name": "encryptedData",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "278:24:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_uint256_$3_storage_ptr",
+                  "typeString": "uint256[3]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4531,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "278:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4533,
+                  "length": {
+                    "argumentTypes": null,
+                    "hexValue": "33",
+                    "id": 4532,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "286:1:9",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": null,
+                      "typeString": null
+                    },
+                    "value": "3"
+                  },
+                  "nodeType": "ArrayTypeName",
+                  "src": "278:10:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$3_storage_ptr",
+                    "typeString": "uint256[3]"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Output",
+            "nodeType": "StructDefinition",
+            "scope": 4660,
+            "src": "207:101:9",
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4658,
+              "nodeType": "Block",
+              "src": "796:601:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4557,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4551,
+                      "name": "outputTx",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4549,
+                      "src": "807:8:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                        "typeString": "struct UTXO.Output memory[] memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "hexValue": "32",
+                          "id": 4555,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "831:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_2_by_1",
+                            "typeString": "int_const 2"
+                          },
+                          "value": "2"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_rational_2_by_1",
+                            "typeString": "int_const 2"
+                          }
+                        ],
+                        "id": 4554,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "lValueRequested": false,
+                        "nodeType": "NewExpression",
+                        "src": "818:12:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_struct$_Output_$4535_memory_$dyn_memory_$",
+                          "typeString": "function (uint256) pure returns (struct UTXO.Output memory[] memory)"
+                        },
+                        "typeName": {
+                          "baseType": {
+                            "contractScope": null,
+                            "id": 4552,
+                            "name": "Output",
+                            "nodeType": "UserDefinedTypeName",
+                            "referencedDeclaration": 4535,
+                            "src": "822:6:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_Output_$4535_storage_ptr",
+                              "typeString": "struct UTXO.Output"
+                            }
+                          },
+                          "id": 4553,
+                          "length": null,
+                          "nodeType": "ArrayTypeName",
+                          "src": "822:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_storage_$dyn_storage_ptr",
+                            "typeString": "struct UTXO.Output[]"
+                          }
+                        }
+                      },
+                      "id": 4556,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "818:15:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory",
+                        "typeString": "struct UTXO.Output memory[] memory"
+                      }
+                    },
+                    "src": "807:26:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                      "typeString": "struct UTXO.Output memory[] memory"
+                    }
+                  },
+                  "id": 4558,
+                  "nodeType": "ExpressionStatement",
+                  "src": "807:26:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4564,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4559,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "875:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4561,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "30",
+                          "id": 4560,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "884:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "875:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4562,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "to",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4528,
+                      "src": "875:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4563,
+                      "name": "_to",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4537,
+                      "src": "892:3:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "875:20:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4565,
+                  "nodeType": "ExpressionStatement",
+                  "src": "875:20:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4573,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4566,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "902:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4568,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "30",
+                          "id": 4567,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "911:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "902:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4569,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "pc",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4530,
+                      "src": "902:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4570,
+                          "name": "_pcTo",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4539,
+                          "src": "919:5:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 4571,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "decompress",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 5018,
+                        "src": "919:16:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_struct$_G1Point_$4667_memory_ptr_$bound_to$_t_uint256_$",
+                          "typeString": "function (uint256) view returns (struct alt_bn128.G1Point memory)"
+                        }
+                      },
+                      "id": 4572,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "919:18:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory_ptr",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "src": "902:35:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                      "typeString": "struct alt_bn128.G1Point memory"
+                    }
+                  },
+                  "id": 4574,
+                  "nodeType": "ExpressionStatement",
+                  "src": "902:35:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4584,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4575,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "944:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4577,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 4576,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "953:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "944:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4578,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "944:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4580,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "30",
+                        "id": 4579,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "970:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_0_by_1",
+                          "typeString": "int_const 0"
+                        },
+                        "value": "0"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "944:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4581,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "975:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4583,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "30",
+                        "id": 4582,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "990:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_0_by_1",
+                          "typeString": "int_const 0"
+                        },
+                        "value": "0"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "975:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "944:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4585,
+                  "nodeType": "ExpressionStatement",
+                  "src": "944:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4595,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4586,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "999:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4588,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 4587,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1008:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "999:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4589,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "999:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4591,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "31",
+                        "id": 4590,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1025:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "999:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4592,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1030:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4594,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "31",
+                        "id": 4593,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1045:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1030:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "999:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4596,
+                  "nodeType": "ExpressionStatement",
+                  "src": "999:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4606,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4597,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1054:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4599,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 4598,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1063:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1054:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4600,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1054:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4602,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "32",
+                        "id": 4601,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1080:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_2_by_1",
+                          "typeString": "int_const 2"
+                        },
+                        "value": "2"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1054:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4603,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1085:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4605,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "32",
+                        "id": 4604,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1100:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_2_by_1",
+                          "typeString": "int_const 2"
+                        },
+                        "value": "2"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1085:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1054:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4607,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1054:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4614,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4608,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "1151:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4610,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "31",
+                          "id": 4609,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1160:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_1_by_1",
+                            "typeString": "int_const 1"
+                          },
+                          "value": "1"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1151:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4611,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "to",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4528,
+                      "src": "1151:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 4612,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5665,
+                        "src": "1168:3:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 4613,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "1168:10:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1151:27:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4615,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1151:27:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4623,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4616,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "1185:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4618,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "31",
+                          "id": 4617,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1194:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_1_by_1",
+                            "typeString": "int_const 1"
+                          },
+                          "value": "1"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1185:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4619,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "pc",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4530,
+                      "src": "1185:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4620,
+                          "name": "_pcRemaining",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4541,
+                          "src": "1202:12:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 4621,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "decompress",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 5018,
+                        "src": "1202:23:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_struct$_G1Point_$4667_memory_ptr_$bound_to$_t_uint256_$",
+                          "typeString": "function (uint256) view returns (struct alt_bn128.G1Point memory)"
+                        }
+                      },
+                      "id": 4622,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1202:25:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory_ptr",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "src": "1185:42:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                      "typeString": "struct alt_bn128.G1Point memory"
+                    }
+                  },
+                  "id": 4624,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1185:42:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4634,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4625,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1234:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4627,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "31",
+                            "id": 4626,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1243:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1234:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4628,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1234:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4630,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "30",
+                        "id": 4629,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1260:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_0_by_1",
+                          "typeString": "int_const 0"
+                        },
+                        "value": "0"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1234:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4631,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1265:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4633,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "33",
+                        "id": 4632,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1280:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_3_by_1",
+                          "typeString": "int_const 3"
+                        },
+                        "value": "3"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1265:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1234:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4635,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1234:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4645,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4636,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1289:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4638,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "31",
+                            "id": 4637,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1298:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1289:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4639,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1289:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4641,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "31",
+                        "id": 4640,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1315:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1289:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4642,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1320:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4644,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "34",
+                        "id": 4643,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1335:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_4_by_1",
+                          "typeString": "int_const 4"
+                        },
+                        "value": "4"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1320:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1289:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4646,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1289:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4656,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4647,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1344:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4649,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "31",
+                            "id": 4648,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1353:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1344:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4650,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1344:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4652,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "32",
+                        "id": 4651,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1370:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_2_by_1",
+                          "typeString": "int_const 2"
+                        },
+                        "value": "2"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1344:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4653,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1375:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4655,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "35",
+                        "id": 4654,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1390:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_5_by_1",
+                          "typeString": "int_const 5"
+                        },
+                        "value": "5"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1375:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1344:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4657,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1344:48:9"
+                }
+              ]
+            },
+            "documentation": "@dev create Output Structures from inputs\r\n@param _to The address to transfer to.\r\n@param _pcTo Pedersen commitment for amount to transfer.\r\n@param _pcRemaining Pedersen commitment for amount remaining.\r\n@param _encryptedData Encrypted data that should contain (value, blinding factor, iv) for each output\r",
+            "id": 4659,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "createOutputs",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4546,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4537,
+                  "name": "_to",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "677:11:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4536,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "677:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4539,
+                  "name": "_pcTo",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "690:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4538,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "690:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4541,
+                  "name": "_pcRemaining",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "705:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4540,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "705:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4545,
+                  "name": "_encryptedData",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "727:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                    "typeString": "uint256[6]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 4542,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "727:7:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 4544,
+                    "length": {
+                      "argumentTypes": null,
+                      "hexValue": "36",
+                      "id": 4543,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "735:1:9",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": null,
+                        "typeString": null
+                      },
+                      "value": "6"
+                    },
+                    "nodeType": "ArrayTypeName",
+                    "src": "727:10:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$6_storage_ptr",
+                      "typeString": "uint256[6]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "676:77:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4550,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4549,
+                  "name": "outputTx",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "777:17:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                    "typeString": "struct UTXO.Output[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "contractScope": null,
+                      "id": 4547,
+                      "name": "Output",
+                      "nodeType": "UserDefinedTypeName",
+                      "referencedDeclaration": 4535,
+                      "src": "777:6:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Output_$4535_storage_ptr",
+                        "typeString": "struct UTXO.Output"
+                      }
+                    },
+                    "id": 4548,
+                    "length": null,
+                    "nodeType": "ArrayTypeName",
+                    "src": "777:8:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_struct$_Output_$4535_storage_$dyn_storage_ptr",
+                      "typeString": "struct UTXO.Output[]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "776:19:9"
+            },
+            "scope": 4660,
+            "src": "654:743:9",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4661,
+        "src": "57:1343:9"
+      }
+    ],
+    "src": "0:1400:9"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/dva/Documents/Development/ELCA/confidential-transactions-smart-contracts/contracts/UTXO.sol",
+    "exportedSymbols": {
+      "UTXO": [
+        4660
+      ]
+    },
+    "id": 4661,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4519,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:9"
+      },
+      {
+        "absolutePath": "/C/Users/dva/Documents/Development/ELCA/confidential-transactions-smart-contracts/contracts/alt_bn128.sol",
+        "file": "./alt_bn128.sol",
+        "id": 4520,
+        "nodeType": "ImportDirective",
+        "scope": 4661,
+        "sourceUnit": 5439,
+        "src": "28:25:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 4660,
+        "linearizedBaseContracts": [
+          4660
+        ],
+        "name": "UTXO",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 4523,
+            "libraryName": {
+              "contractScope": null,
+              "id": 4521,
+              "name": "alt_bn128",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5438,
+              "src": "81:9:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_alt_bn128_$5438",
+                "typeString": "library alt_bn128"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "75:28:9",
+            "typeName": {
+              "id": 4522,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "95:7:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "id": 4526,
+            "libraryName": {
+              "contractScope": null,
+              "id": 4524,
+              "name": "alt_bn128",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5438,
+              "src": "113:9:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_alt_bn128_$5438",
+                "typeString": "library alt_bn128"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "107:38:9",
+            "typeName": {
+              "contractScope": null,
+              "id": 4525,
+              "name": "alt_bn128.G1Point",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4667,
+              "src": "127:17:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_G1Point_$4667_storage_ptr",
+                "typeString": "struct alt_bn128.G1Point"
+              }
+            }
+          },
+          {
+            "canonicalName": "UTXO.Output",
+            "id": 4535,
+            "members": [
+              {
+                "constant": false,
+                "id": 4528,
+                "name": "to",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "230:10:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 4527,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "230:7:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4530,
+                "name": "pc",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "249:20:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_G1Point_$4667_storage_ptr",
+                  "typeString": "struct alt_bn128.G1Point"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 4529,
+                  "name": "alt_bn128.G1Point",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 4667,
+                  "src": "249:17:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_G1Point_$4667_storage_ptr",
+                    "typeString": "struct alt_bn128.G1Point"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 4534,
+                "name": "encryptedData",
+                "nodeType": "VariableDeclaration",
+                "scope": 4535,
+                "src": "278:24:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_uint256_$3_storage_ptr",
+                  "typeString": "uint256[3]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 4531,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "278:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4533,
+                  "length": {
+                    "argumentTypes": null,
+                    "hexValue": "33",
+                    "id": 4532,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "286:1:9",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": null,
+                      "typeString": null
+                    },
+                    "value": "3"
+                  },
+                  "nodeType": "ArrayTypeName",
+                  "src": "278:10:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$3_storage_ptr",
+                    "typeString": "uint256[3]"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Output",
+            "nodeType": "StructDefinition",
+            "scope": 4660,
+            "src": "207:101:9",
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4658,
+              "nodeType": "Block",
+              "src": "796:601:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4557,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4551,
+                      "name": "outputTx",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4549,
+                      "src": "807:8:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                        "typeString": "struct UTXO.Output memory[] memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "hexValue": "32",
+                          "id": 4555,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "831:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_2_by_1",
+                            "typeString": "int_const 2"
+                          },
+                          "value": "2"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_rational_2_by_1",
+                            "typeString": "int_const 2"
+                          }
+                        ],
+                        "id": 4554,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "lValueRequested": false,
+                        "nodeType": "NewExpression",
+                        "src": "818:12:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_struct$_Output_$4535_memory_$dyn_memory_$",
+                          "typeString": "function (uint256) pure returns (struct UTXO.Output memory[] memory)"
+                        },
+                        "typeName": {
+                          "baseType": {
+                            "contractScope": null,
+                            "id": 4552,
+                            "name": "Output",
+                            "nodeType": "UserDefinedTypeName",
+                            "referencedDeclaration": 4535,
+                            "src": "822:6:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_Output_$4535_storage_ptr",
+                              "typeString": "struct UTXO.Output"
+                            }
+                          },
+                          "id": 4553,
+                          "length": null,
+                          "nodeType": "ArrayTypeName",
+                          "src": "822:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_storage_$dyn_storage_ptr",
+                            "typeString": "struct UTXO.Output[]"
+                          }
+                        }
+                      },
+                      "id": 4556,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "818:15:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory",
+                        "typeString": "struct UTXO.Output memory[] memory"
+                      }
+                    },
+                    "src": "807:26:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                      "typeString": "struct UTXO.Output memory[] memory"
+                    }
+                  },
+                  "id": 4558,
+                  "nodeType": "ExpressionStatement",
+                  "src": "807:26:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4564,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4559,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "875:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4561,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "30",
+                          "id": 4560,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "884:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "875:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4562,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "to",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4528,
+                      "src": "875:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4563,
+                      "name": "_to",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4537,
+                      "src": "892:3:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "875:20:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4565,
+                  "nodeType": "ExpressionStatement",
+                  "src": "875:20:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4573,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4566,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "902:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4568,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "30",
+                          "id": 4567,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "911:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "902:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4569,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "pc",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4530,
+                      "src": "902:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4570,
+                          "name": "_pcTo",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4539,
+                          "src": "919:5:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 4571,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "decompress",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 5018,
+                        "src": "919:16:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_struct$_G1Point_$4667_memory_ptr_$bound_to$_t_uint256_$",
+                          "typeString": "function (uint256) view returns (struct alt_bn128.G1Point memory)"
+                        }
+                      },
+                      "id": 4572,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "919:18:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory_ptr",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "src": "902:35:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                      "typeString": "struct alt_bn128.G1Point memory"
+                    }
+                  },
+                  "id": 4574,
+                  "nodeType": "ExpressionStatement",
+                  "src": "902:35:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4584,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4575,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "944:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4577,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 4576,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "953:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "944:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4578,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "944:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4580,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "30",
+                        "id": 4579,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "970:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_0_by_1",
+                          "typeString": "int_const 0"
+                        },
+                        "value": "0"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "944:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4581,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "975:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4583,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "30",
+                        "id": 4582,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "990:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_0_by_1",
+                          "typeString": "int_const 0"
+                        },
+                        "value": "0"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "975:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "944:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4585,
+                  "nodeType": "ExpressionStatement",
+                  "src": "944:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4595,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4586,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "999:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4588,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 4587,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1008:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "999:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4589,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "999:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4591,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "31",
+                        "id": 4590,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1025:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "999:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4592,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1030:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4594,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "31",
+                        "id": 4593,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1045:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1030:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "999:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4596,
+                  "nodeType": "ExpressionStatement",
+                  "src": "999:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4606,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4597,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1054:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4599,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "30",
+                            "id": 4598,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1063:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_0_by_1",
+                              "typeString": "int_const 0"
+                            },
+                            "value": "0"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1054:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4600,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1054:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4602,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "32",
+                        "id": 4601,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1080:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_2_by_1",
+                          "typeString": "int_const 2"
+                        },
+                        "value": "2"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1054:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4603,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1085:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4605,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "32",
+                        "id": 4604,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1100:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_2_by_1",
+                          "typeString": "int_const 2"
+                        },
+                        "value": "2"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1085:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1054:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4607,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1054:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4614,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4608,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "1151:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4610,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "31",
+                          "id": 4609,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1160:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_1_by_1",
+                            "typeString": "int_const 1"
+                          },
+                          "value": "1"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1151:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4611,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "to",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4528,
+                      "src": "1151:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 4612,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5665,
+                        "src": "1168:3:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 4613,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "1168:10:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1151:27:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4615,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1151:27:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4623,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 4616,
+                          "name": "outputTx",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4549,
+                          "src": "1185:8:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                            "typeString": "struct UTXO.Output memory[] memory"
+                          }
+                        },
+                        "id": 4618,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "hexValue": "31",
+                          "id": 4617,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1194:1:9",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_1_by_1",
+                            "typeString": "int_const 1"
+                          },
+                          "value": "1"
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1185:11:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Output_$4535_memory",
+                          "typeString": "struct UTXO.Output memory"
+                        }
+                      },
+                      "id": 4619,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "pc",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4530,
+                      "src": "1185:14:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4620,
+                          "name": "_pcRemaining",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4541,
+                          "src": "1202:12:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 4621,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "decompress",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 5018,
+                        "src": "1202:23:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$_t_uint256_$returns$_t_struct$_G1Point_$4667_memory_ptr_$bound_to$_t_uint256_$",
+                          "typeString": "function (uint256) view returns (struct alt_bn128.G1Point memory)"
+                        }
+                      },
+                      "id": 4622,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1202:25:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_G1Point_$4667_memory_ptr",
+                        "typeString": "struct alt_bn128.G1Point memory"
+                      }
+                    },
+                    "src": "1185:42:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_G1Point_$4667_memory",
+                      "typeString": "struct alt_bn128.G1Point memory"
+                    }
+                  },
+                  "id": 4624,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1185:42:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4634,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4625,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1234:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4627,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "31",
+                            "id": 4626,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1243:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1234:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4628,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1234:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4630,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "30",
+                        "id": 4629,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1260:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_0_by_1",
+                          "typeString": "int_const 0"
+                        },
+                        "value": "0"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1234:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4631,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1265:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4633,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "33",
+                        "id": 4632,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1280:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_3_by_1",
+                          "typeString": "int_const 3"
+                        },
+                        "value": "3"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1265:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1234:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4635,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1234:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4645,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4636,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1289:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4638,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "31",
+                            "id": 4637,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1298:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1289:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4639,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1289:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4641,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "31",
+                        "id": 4640,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1315:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1_by_1",
+                          "typeString": "int_const 1"
+                        },
+                        "value": "1"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1289:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4642,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1320:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4644,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "34",
+                        "id": 4643,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1335:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_4_by_1",
+                          "typeString": "int_const 4"
+                        },
+                        "value": "4"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1320:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1289:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4646,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1289:48:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4656,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "baseExpression": {
+                            "argumentTypes": null,
+                            "id": 4647,
+                            "name": "outputTx",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4549,
+                            "src": "1344:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                              "typeString": "struct UTXO.Output memory[] memory"
+                            }
+                          },
+                          "id": 4649,
+                          "indexExpression": {
+                            "argumentTypes": null,
+                            "hexValue": "31",
+                            "id": 4648,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "number",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "1353:1:9",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_rational_1_by_1",
+                              "typeString": "int_const 1"
+                            },
+                            "value": "1"
+                          },
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "IndexAccess",
+                          "src": "1344:11:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Output_$4535_memory",
+                            "typeString": "struct UTXO.Output memory"
+                          }
+                        },
+                        "id": 4650,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "encryptedData",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4534,
+                        "src": "1344:25:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$3_memory",
+                          "typeString": "uint256[3] memory"
+                        }
+                      },
+                      "id": 4652,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "32",
+                        "id": 4651,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1370:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_2_by_1",
+                          "typeString": "int_const 2"
+                        },
+                        "value": "2"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "1344:28:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 4653,
+                        "name": "_encryptedData",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4545,
+                        "src": "1375:14:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                          "typeString": "uint256[6] memory"
+                        }
+                      },
+                      "id": 4655,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "hexValue": "35",
+                        "id": 4654,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "number",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1390:1:9",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_5_by_1",
+                          "typeString": "int_const 5"
+                        },
+                        "value": "5"
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "1375:17:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1344:48:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4657,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1344:48:9"
+                }
+              ]
+            },
+            "documentation": "@dev create Output Structures from inputs\r\n@param _to The address to transfer to.\r\n@param _pcTo Pedersen commitment for amount to transfer.\r\n@param _pcRemaining Pedersen commitment for amount remaining.\r\n@param _encryptedData Encrypted data that should contain (value, blinding factor, iv) for each output\r",
+            "id": 4659,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "createOutputs",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4546,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4537,
+                  "name": "_to",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "677:11:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4536,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "677:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4539,
+                  "name": "_pcTo",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "690:13:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4538,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "690:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4541,
+                  "name": "_pcRemaining",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "705:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 4540,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "705:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4545,
+                  "name": "_encryptedData",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "727:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$6_memory_ptr",
+                    "typeString": "uint256[6]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 4542,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "727:7:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 4544,
+                    "length": {
+                      "argumentTypes": null,
+                      "hexValue": "36",
+                      "id": 4543,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "735:1:9",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": null,
+                        "typeString": null
+                      },
+                      "value": "6"
+                    },
+                    "nodeType": "ArrayTypeName",
+                    "src": "727:10:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$6_storage_ptr",
+                      "typeString": "uint256[6]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "676:77:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4550,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4549,
+                  "name": "outputTx",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4659,
+                  "src": "777:17:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_struct$_Output_$4535_memory_$dyn_memory_ptr",
+                    "typeString": "struct UTXO.Output[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "contractScope": null,
+                      "id": 4547,
+                      "name": "Output",
+                      "nodeType": "UserDefinedTypeName",
+                      "referencedDeclaration": 4535,
+                      "src": "777:6:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Output_$4535_storage_ptr",
+                        "typeString": "struct UTXO.Output"
+                      }
+                    },
+                    "id": 4548,
+                    "length": null,
+                    "nodeType": "ArrayTypeName",
+                    "src": "777:8:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_struct$_Output_$4535_storage_$dyn_storage_ptr",
+                      "typeString": "struct UTXO.Output[]"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "776:19:9"
+            },
+            "scope": 4660,
+            "src": "654:743:9",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4661,
+        "src": "57:1343:9"
+      }
+    ],
+    "src": "0:1400:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0x08d1dc7e1e0cdae46998f8b77a4a50742e0b7a56",
+      "transactionHash": "0x6c4e2397c6241e4e7f42012901892101cf367a57e235e483af6fc564922c8eb1"
+    },
+    "1515": {
+      "events": {},
+      "links": {},
+      "address": "0xbe8bccf4570300d822e72e86d73a5b860e667fe9",
+      "transactionHash": "0x0a405c7b079e4e2358f4931cd107ad8885ec2e90a1149adfe3930047f14dda93"
+    }
+  },
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-07-16T15:49:46.218Z"
+}

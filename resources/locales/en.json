@@ -1,0 +1,54 @@
+{
+  "lang": "English",
+  "commons": {
+    "tab_dashboard": "Dashboard",
+    "tab_send": "Send",
+    "tab_receive": "Receive",
+    "tab_history": "History",
+    "tab_settings": "Settings",
+    "tab_withdraw": "Withdraw"
+  },
+  "intro": {
+    "create_wallet": "Create a new Wallet",
+    "import_wallet": "Import an existing Wallet",
+    "title": "Welcome to your confidential wallet",
+    "import_button": "Import",
+    "loading": "Loading",
+    "init_wallet": "Initializing wallet",
+    "registration_error":
+      "Error while registering user, please register manually",
+    "error_registration_manual": "Please register manually",
+    "error_mnemonic_generation": "Error while generating a new mnemonic",
+    "error_storage": "Impossible to access device's storage"
+  },
+  "dashboard": {
+    "hello": "Welcome",
+    "first_time_loading": "Syncing wallet for the first time",
+    "syncing": "Syncing wallet"
+  },
+  "send": {
+    "recipient": "Recipient address",
+    "amount": "Amount in CHF",
+    "close": "Close",
+    "error_transfer": "Error while transferring tokens",
+    "insufficient_funds": "Insufficient funds",
+    "not_registered": "User not registered",
+    "invalid_address": "Invalid address"
+  },
+  "settings": {
+    "register": "Register",
+    "copy_seed": "Copy seed to clipboard",
+    "get_eth_balance": "See ETH balance"
+  },
+  "receive": {
+    "address": "Your address"
+  },
+  "withdraw": {
+    "withdraw_button": "Withdraw CHF",
+    "burn_button": "Burn all pending withdrawals",
+    "error_centralbank_registration":
+      "Withdraws are unavailable for the moment.",
+    "error_withdraw": "Error while withdrawing tokens",
+    "error_burn": "Error while burning tokens"
+  }
+}
